@@ -20,8 +20,5 @@ router.route('/:id')
     .patch(user.update)
     .delete(user.delete)
 
-
-
-
 /* ------------------------------------------------------- */
 module.exports = router

@@ -20,8 +20,28 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         trim: true,
-        required: true,
-        set: passwordEncrypt
+        // required: true,
+        // validate: [ (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password),
+        // 'Password type is nor correct.' ],
+        // set: passwordEncrypt
+        //? Yontem-1:
+        set: (password) => {
+            if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)){
+                return passwordEncrypt(password)
+            } else {
+                res.errorStatusCode = 403
+                throw new Error('Password type is nor correct.')
+            } 
+        }
+        //?Yontem-2:
+        // set: (password) => {
+        //     if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)){
+        //         return passwordEncrypt(password)
+        //     } else {
+        //         return 'wrong'
+        //     } 
+        // },
+        // validate: (password) => (password != 'wrong')
     },
 
     email: {
@@ -29,7 +49,8 @@ const UserSchema = new mongoose.Schema({
         trim: true,
         unique: true,
         required: true,
-        validate: (email) => email.includes("@") && email.includes("."),
+        validate: [ (email) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email),
+        'Email type is not correct.' ],
     },
 
     isActive: {
