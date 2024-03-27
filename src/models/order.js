@@ -41,7 +41,8 @@ const OrderSchema = new mongoose.Schema({
         type: Number,
         // required: true
         default: function() {return this.quantity * this.price},  // Create de calisiyor sadece, update de calismasi icin transform kullaniriz.
-        transform: function() { return this.quantity * this.price}  // Bu sekilde updatede de calisir. 
+        transform: function() { return this.quantity * this.price},  // Bu sekilde updatede de calisir. 
+        // set: function() { return this.quantity * this.price }  //  set kullanmak sikinti oluyor. 
     }
 
 }, {
